@@ -10,8 +10,19 @@
 #include <sstream>
 #include <pthread.h>
 
-#define STRUCT_LOADER( x, n, s, l, h ) x.numbers = n, x.size = s, x.low = l, x.high = h
-#define STRUCT_LOADER_POINTER( x, n, s, l, h ) x->numbers = n, x->size = s, x->low = l, x->high = h
+#define ARRAY_SIZE 100000
+
+#define STRUCT_LOADER(x, n, s, l, h) \
+  x.numbers = n, \
+  x.size = s,    \
+  x.low = l,     \
+  x.high = h
+
+#define STRUCT_LOADER_POINTER(x, n, s, l, h) \
+  x->numbers = n, \
+  x->size = s,    \
+  x->low = l,     \
+  x->high = h
 
 
 void merge(int *, int, int, int, int);
@@ -129,22 +140,24 @@ void merge(int *numbers, int size, int low, int mid, int high) {
 
 int main() {
 
-  int numbers[] = {55, 12, -100, 10, 43, 23, -78, 45, 123, 56, 98, 41, 90, 24};
-  int num;
+  int size = ARRAY_SIZE; // size of array
+  int numbers[size]; // array to sort
+  int temp[size]; // temp array for merging
 
-  num = sizeof(numbers) / sizeof(int);
+  // load up array to sort and print values
+  std::cout << "unsorted: ";
+  for (int i, number = 0; i < size; i++) {
+    number = (rand() % 2000) - 100;
+    numbers[i] = number;
+    std::cout << number << " ";
+  }
 
-  std::cout << "Unsorted: ";
-  for (int i = 0; i < num; i++)
-    std::cout << numbers[i] << " ";
+  // sort the thing
+  merge_sort_start(numbers, size, 0, size - 1);
 
-  // temporary array to be used for merging
-  int temp[num]; 
-
-  merge_sort_start(numbers, num, 0, num - 1);
-
-  std::cout << std:: endl << "Sorted:   ";
-  for (int i = 0; i < num; i++)
+  // print the sorted array
+  std::cout << std:: endl << "sorted:   ";
+  for (int i = 0; i < size; i++)
     std::cout << numbers[i] << " ";
 
   std::cout << std::endl;
