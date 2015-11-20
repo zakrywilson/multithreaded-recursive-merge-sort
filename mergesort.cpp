@@ -18,6 +18,7 @@ void merge(int *, int, int, int, int);
 
 void* merge_sort(void* p);
 
+// Holds array data to be passed into pthread_create
 struct sort_args {
   int *numbers;
   int size;
@@ -25,9 +26,10 @@ struct sort_args {
   int high;
 };
 
+// Initial merging and sorting called only by main
 void merge_sort_start(int *numbers, int size, int low, int high) {
 
-  int mid = (low + high)/2;
+  int mid = (low + high) / 2;
   struct sort_args left, right;
 
   pthread_t thread_left, thread_right;
@@ -44,7 +46,9 @@ void merge_sort_start(int *numbers, int size, int low, int high) {
   merge(numbers, size, low, mid, high);
 }
 
+// Recursive merging and sorting
 void* merge_sort(void* p) {
+
   struct sort_args *args = (struct sort_args *) p;
   int mid;
   int low_save = args->low;
@@ -65,43 +69,43 @@ void* merge_sort(void* p) {
   return NULL;
 }
 
+// Function that merges the arrays together
 void merge(int *numbers, int size, int low, int mid, int high) {
+
+  int temp[size];
   int h, i, j, k;
   h = low;
   i = low;
   j = mid + 1;
 
-  int temp[size];
-
-  // Traverse both halves of the array
+  // traverse both parts of the array...
   while ((h <= mid) && (j <= high)) { 
 
-    // if an element of left half is 
-    // less than element of right half
+    // if an element of left half of the array is 
+    // less than element of right half of the array...
     if (numbers[h] <= numbers[j]) {
 
-      // store element of left half in the temp array
+      // store left-half element in the temp array
       temp[i] = numbers[h]; 
 
-      // shift the index of the array 
+      // now shift the index of the array 
       // from which the element was copied to temp 
       h++;
     }
 
-    // otherwise store the element of the right half 
-    // in the temporary array
+    // else, store the right half element in the temp array
     else {
 
       temp[i] = numbers[j];
 
-      // shift the index of the array from 
+      // now shift the index of the array from 
       // which the element was copied to temp 
       j++; 
     }
     i++;
   }
 
-  // if traversal of left half is done, 
+  // if we're done traversing the left half,
   // copy remaining elements from right half to temp
   if (h > mid) {
     for (k = j; k <= high; k++) {
@@ -110,7 +114,7 @@ void merge(int *numbers, int size, int low, int mid, int high) {
     }
   }
 
-  // otherwise copy remaining elements from left half to temp
+  // else, copy remaining elements from left half to temp
   else {
     for (k = h; k <= mid; k++) {
       temp[i] = numbers[k];
@@ -125,7 +129,7 @@ void merge(int *numbers, int size, int low, int mid, int high) {
 
 int main() {
 
-  int numbers[] = {12, 10, 43, 23, -78, 45, 123, 56, 98, 41, 90, 24};
+  int numbers[] = {55, 12, -100, 10, 43, 23, -78, 45, 123, 56, 98, 41, 90, 24};
   int num;
 
   num = sizeof(numbers) / sizeof(int);
@@ -139,7 +143,7 @@ int main() {
 
   merge_sort_start(numbers, num, 0, num - 1);
 
-  std::cout << std:: endl << "Sorted: ";
+  std::cout << std:: endl << "Sorted:   ";
   for (int i = 0; i < num; i++)
     std::cout << numbers[i] << " ";
 
