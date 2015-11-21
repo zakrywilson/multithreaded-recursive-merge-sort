@@ -10,24 +10,9 @@
 #include <sstream>
 #include <pthread.h>
 
-#define ARRAY_SIZE 100000
 
-#define STRUCT_LOADER(x, n, s, l, h) \
-  x.numbers = n, \
-  x.size = s,    \
-  x.low = l,     \
-  x.high = h
-
-#define STRUCT_LOADER_POINTER(x, n, s, l, h) \
-  x->numbers = n, \
-  x->size = s,    \
-  x->low = l,     \
-  x->high = h
-
-
-void merge(int *, int, int, int, int);
-
-void* merge_sort(void* p);
+// sort a million numbers
+const int ARRAY_SIZE = 100000;
 
 // Holds array data to be passed into pthread_create
 struct sort_args {
@@ -37,6 +22,18 @@ struct sort_args {
   int high;
 };
 
+// loads the params into structure
+inline void loader(struct sort_args *p, int *n, int s, int l, int h) {
+  p->numbers = n;
+  p->size = s;
+  p->low = l;
+  p->high = h;
+}
+
+void merge(int *, int, int, int, int);
+
+void* merge_sort(void* p);
+
 // Initial merging and sorting called only by main
 void merge_sort_start(int *numbers, int size, int low, int high) {
 
@@ -45,8 +42,8 @@ void merge_sort_start(int *numbers, int size, int low, int high) {
 
   pthread_t thread_left, thread_right;
 
-  STRUCT_LOADER(left, numbers, size, low, mid);
-  STRUCT_LOADER(right, numbers, size, mid + 1, high);
+  loader(&left, numbers, size, low, mid);
+  loader(&right, numbers, size, mid + 1, high);
 
   pthread_create(&thread_left, NULL, &merge_sort, (void *) &left);
   pthread_create(&thread_right, NULL, &merge_sort, (void *) &right);
@@ -62,19 +59,18 @@ void* merge_sort(void* p) {
 
   struct sort_args *args = (struct sort_args *) p;
   int mid;
-  int low_save = args->low;
-  int high_save = args->high;
+  struct sort_args left, right;
 
   if (args->low < args->high) {
     mid = (args->low + args->high) / 2;
 
-    STRUCT_LOADER_POINTER(args, args->numbers, args->size, args->low, mid);
-    merge_sort((void *) args);
+    loader(&left, args->numbers, args->size, args->low, mid);
+    merge_sort((void *) &left);
 
-    STRUCT_LOADER_POINTER(args, args->numbers, args->size, mid + 1, high_save);
-    merge_sort((void *) args);
+    loader(&right, args->numbers, args->size, mid + 1, args->high);
+    merge_sort((void *) &right);
 
-    merge(args->numbers, args->size, low_save, mid, high_save);
+    merge(args->numbers, args->size, args->low, mid, args->high);
   }
 
   return NULL;
@@ -144,10 +140,13 @@ int main() {
   int numbers[size]; // array to sort
   int temp[size]; // temp array for merging
 
+  // seed random number generator
+  srand(time(NULL));
+
   // load up array to sort and print values
   std::cout << "unsorted: ";
   for (int i, number = 0; i < size; i++) {
-    number = (rand() % 2000) - 100;
+    number = (rand() % 10000) - 5000;
     numbers[i] = number;
     std::cout << number << " ";
   }
