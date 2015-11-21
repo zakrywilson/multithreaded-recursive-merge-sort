@@ -1,14 +1,16 @@
 /*
  * Zach Wilson
  * Multithreading Merge Sort
+ *
+ * This is the program being tested.
+ * It uses two threads to merge the
+ * sorted arrays back together.
  */
 
 
 #include <iostream>
-#include <vector>
-#include <string>
-#include <sstream>
 #include <pthread.h>
+#include <time.h>
 
 
 // sort a million numbers
@@ -138,7 +140,7 @@ int main() {
 
   int size = ARRAY_SIZE; // size of array
   int numbers[size]; // array to sort
-  int temp[size]; // temp array for merging
+  clock_t start, end; // used for timing
 
   // seed random number generator
   srand(time(NULL));
@@ -152,7 +154,9 @@ int main() {
   }
 
   // sort the thing
+  start = clock();
   merge_sort_start(numbers, size, 0, size - 1);
+  end = clock();
 
   // print the sorted array
   std::cout << std:: endl << "sorted:   ";
@@ -160,4 +164,7 @@ int main() {
     std::cout << numbers[i] << " ";
 
   std::cout << std::endl;
+  float per_ms = (CLOCKS_PER_SEC/1000);
+  float run_time = ((float)end - (float)start) / per_ms;
+  std::cout << run_time << " ms" << std::endl;
 }
