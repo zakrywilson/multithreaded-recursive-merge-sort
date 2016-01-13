@@ -13,9 +13,6 @@
 #include <time.h>
 
 
-// sort a million numbers
-const int ARRAY_SIZE = 100000;
-
 // Holds array data to be passed into pthread_create
 struct sort_args {
   int *numbers;
@@ -138,7 +135,7 @@ void merge(int *numbers, int size, int low, int mid, int high) {
 
 int main() {
 
-  int size = ARRAY_SIZE; // size of array
+  int size = 100000; // size of array
   int numbers[size]; // array to sort
   clock_t start, end; // used for timing
 
