@@ -107,7 +107,7 @@ int main() {
   end = clock();
 
   // print the sorted array
-  std::cout << std:: endl << "sorted:   ";
+  std::cout << std::endl << "sorted:   ";
   for (int i = 0; i < size; i++)
     std::cout << numbers[i] << " ";
 
