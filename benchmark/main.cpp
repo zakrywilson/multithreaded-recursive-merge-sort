@@ -11,12 +11,9 @@
 #include <time.h>
 #include "benchmark.h" 
 
-// sort a million numbers
-const int ARRAY_SIZE = 100000;
-
 int main() {
 
-  int size = ARRAY_SIZE; // size of array
+  int size = 100000; // size of array
   int numbers[size]; // array to sort
   int temp[size]; // temp array for merging
   clock_t start, end; // used for timing
