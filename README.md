@@ -4,5 +4,5 @@ Recursive merge sort with POSIX threads
 
 ### Requirements
 
-* C++ 11  
+* C++ 98 (or higher)
 * POSIX threads
