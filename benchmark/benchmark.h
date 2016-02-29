@@ -11,7 +11,7 @@ class MergeSort {
 
  public:
 
- 	MergeSort();
+  MergeSort();
 
   ~MergeSort();
 
