@@ -11,6 +11,6 @@ if [ -e *.out ]; then
 fi
 
 # Run program
-g++ -lpthread main.cpp mergesort.cpp -o mergesort.out
+clang++ -lpthread main.cpp mergesort.cpp -o mergesort.out
 ./mergesort.out
 

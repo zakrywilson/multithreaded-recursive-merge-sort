@@ -11,6 +11,6 @@ if [ -e *.out ]; then
 fi
 
 # Run program
-g++ main.cpp benchmark.cpp -o benchmark.out
+clang++ main.cpp benchmark.cpp -o benchmark.out
 ./benchmark.out
 

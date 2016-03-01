@@ -26,3 +26,4 @@ Run manually
 
 * C++ 98 (or later)
 * POSIX threads
+* *compiled using clang*
