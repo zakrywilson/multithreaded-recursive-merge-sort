@@ -6,7 +6,7 @@ Recursive merge sort with POSIX threads
 
 ##### Mergesort
 
-`> clang++ -lpthread mergesort.cpp -o mergesort`  
+`> clang++ -lpthread main.cpp mergesort.cpp -o mergesort`  
 `> ./mergesort`  
 
 ##### Benchmark
@@ -16,9 +16,9 @@ Recursive merge sort with POSIX threads
 
 ### Requirements
 
-* C++ 98 (or higher)
+* C++ 98 (or later)
 * POSIX threads
 
 #### Notes
 
-*More functionality to mergesort.cpp is coming*
+*Run scripts coming soon*
