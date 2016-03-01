@@ -9,21 +9,8 @@
 #include <time.h>
 #include "benchmark.h"
 
-MergeSort::MergeSort() {}
 
-MergeSort::~MergeSort() {}
-
-void MergeSort::merge_sort(int *numbers, int *temp, int low, int high) {
-  int mid;
-  if (low < high) {
-    mid = (low + high) / 2;
-    merge_sort(numbers, temp, low, mid);
-    merge_sort(numbers, temp, mid + 1, high);
-    merge(numbers, temp, low, mid, high);
-  }
-}
-
-void MergeSort::merge(int *numbers, int *temp, int low, int mid, int high) {
+void merge(int *numbers, int *temp, int low, int mid, int high) {
   int h, i, j, k;
   h = low;
   i = low;
@@ -77,4 +64,14 @@ void MergeSort::merge(int *numbers, int *temp, int low, int mid, int high) {
   // recopy the values from temporary to original array.
   for (k = low; k <= high; k++) 
     numbers[k] = temp[k];
+}
+
+void merge_sort(int *numbers, int *temp, int low, int high) {
+  int mid;
+  if (low < high) {
+    mid = (low + high) / 2;
+    merge_sort(numbers, temp, low, mid);
+    merge_sort(numbers, temp, mid + 1, high);
+    merge(numbers, temp, low, mid, high);
+  }
 }

@@ -7,9 +7,11 @@
  * benchmark for mergesort.cpp that implements multithreading.
  */
 
+
 #include <iostream>
 #include <time.h>
 #include "benchmark.h" 
+
 
 int main() {
 
@@ -17,7 +19,6 @@ int main() {
   int numbers[size]; // array to sort
   int temp[size]; // temp array for merging
   clock_t start, end; // used for timing
-  MergeSort sorter; // create instance of MergeSort
 
   // seed random number generator
   srand(time(NULL));
@@ -32,7 +33,7 @@ int main() {
 
   // sort the thing
   start = clock();
-  sorter.merge_sort(numbers, temp, 0, size - 1);
+  merge_sort(numbers, temp, 0, size - 1);
   end = clock();
 
   // print the sorted array
