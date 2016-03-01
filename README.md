@@ -26,7 +26,3 @@ Run manually
 
 * C++ 98 (or later)
 * POSIX threads
-
-## Notes
-
-*Run scripts coming soon*
