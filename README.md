@@ -6,19 +6,19 @@ Recursive merge sort with POSIX threads
 
 ### Mergesort
 
-##### Run with script  
+Run with script  
 `> ./run`
 
-##### Run manually  
+Run manually  
 `> clang++ -lpthread main.cpp mergesort.cpp -o mergesort`  
 `> ./mergesort`  
 
 ### Benchmark
 
-##### Run with script  
+Run with script  
 `> ./run`
 
-##### Run manually  
+Run manually  
 `> clang++ main.cpp benchmark.cpp -o benchmark`  
 `> ./benchmark`  
 
