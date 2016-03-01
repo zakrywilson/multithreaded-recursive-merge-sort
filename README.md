@@ -10,8 +10,8 @@ Run with script
 `> ./run`
 
 Run manually  
-`> clang++ -lpthread main.cpp mergesort.cpp -o mergesort`  
-`> ./mergesort`  
+`> clang++ -lpthread main.cpp mergesort.cpp -o mergesort.out`  
+`> ./mergesort.out`  
 
 ### Benchmark
 
@@ -19,8 +19,8 @@ Run with script
 `> ./run`
 
 Run manually  
-`> clang++ main.cpp benchmark.cpp -o benchmark`  
-`> ./benchmark`  
+`> clang++ main.cpp benchmark.cpp -o benchmark.out`  
+`> ./benchmark.out`  
 
 ## Requirements
 
