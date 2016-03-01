@@ -1,72 +1,51 @@
 /*
  * Zach Wilson
  * Multithreading Merge Sort
- *
- * This is the program being tested.
- * It uses two threads to merge the
- * sorted arrays back together.
+ * mergesort.cpp
  */
 
 
 #include <iostream>
 #include <pthread.h>
 #include <time.h>
+#include "mergesort.h"
 
 
-// Holds array data to be passed into pthread_create
-struct sort_args {
+void *merge_sort(void* p);
+void merge(int *numbers, int size, int low, int mid, int high);
+void load(struct SortArgs *p, int *_numbers, int _size, int _low, int _high);
+
+
+/* Holds array data to be passed into pthread_create */
+struct SortArgs {
   int *numbers;
   int size;
   int low;
   int high;
 };
 
-// loads the params into structure
-inline void loader(struct sort_args *p, int *n, int s, int l, int h) {
-  p->numbers = n;
-  p->size = s;
-  p->low = l;
-  p->high = h;
+/* Loads the parameters into the structure */
+void load(struct SortArgs *p, int *_numbers, int _size, int _low, int _high) {
+  p->numbers = _numbers;
+  p->size = _size;
+  p->low = _low;
+  p->high = _high;
 }
 
-void merge(int *, int, int, int, int);
+/* Recursive merging and sorting */
+void *merge_sort(void* p) {
 
-void* merge_sort(void* p);
-
-// Initial merging and sorting called only by main
-void merge_sort_start(int *numbers, int size, int low, int high) {
-
-  int mid = (low + high) / 2;
-  struct sort_args left, right;
-
-  pthread_t thread_left, thread_right;
-
-  loader(&left, numbers, size, low, mid);
-  loader(&right, numbers, size, mid + 1, high);
-
-  pthread_create(&thread_left, NULL, &merge_sort, (void *) &left);
-  pthread_create(&thread_right, NULL, &merge_sort, (void *) &right);
-
-  pthread_join(thread_left, NULL);
-  pthread_join(thread_right, NULL);
-
-  merge(numbers, size, low, mid, high);
-}
-
-// Recursive merging and sorting
-void* merge_sort(void* p) {
-
-  struct sort_args *args = (struct sort_args *) p;
+  struct SortArgs *args = (struct SortArgs *) p;
   int mid;
-  struct sort_args left, right;
+  struct SortArgs left, right;
 
   if (args->low < args->high) {
     mid = (args->low + args->high) / 2;
 
-    loader(&left, args->numbers, args->size, args->low, mid);
+    load(&left, args->numbers, args->size, args->low, mid);
     merge_sort((void *) &left);
 
-    loader(&right, args->numbers, args->size, mid + 1, args->high);
+    load(&right, args->numbers, args->size, mid + 1, args->high);
     merge_sort((void *) &right);
 
     merge(args->numbers, args->size, args->low, mid, args->high);
@@ -75,7 +54,7 @@ void* merge_sort(void* p) {
   return NULL;
 }
 
-// Function that merges the arrays together
+/* Merges arrays together */
 void merge(int *numbers, int size, int low, int mid, int high) {
 
   int temp[size];
@@ -133,35 +112,23 @@ void merge(int *numbers, int size, int low, int mid, int high) {
     numbers[k] = temp[k];
 }
 
-int main() {
+/* Initial merging and sorting */
+void merge_sort_start(int *numbers, int size, int low, int high) {
 
-  int size = 100000; // size of array
-  int numbers[size]; // array to sort
-  clock_t start, end; // used for timing
+  int mid = (low + high) / 2;
+  struct SortArgs left, right;
 
-  // seed random number generator
-  srand(time(NULL));
+  pthread_t thread_left, thread_right;
 
-  // load up array to sort and print values
-  std::cout << "unsorted: ";
-  for (int i, number = 0; i < size; i++) {
-    number = (rand() % 10000) - 5000;
-    numbers[i] = number;
-    std::cout << number << " ";
-  }
+  load(&left, numbers, size, low, mid);
+  load(&right, numbers, size, mid + 1, high);
 
-  // sort the thing
-  start = clock();
-  merge_sort_start(numbers, size, 0, size - 1);
-  end = clock();
+  pthread_create(&thread_left, NULL, &merge_sort, (void *) &left);
+  pthread_create(&thread_right, NULL, &merge_sort, (void *) &right);
 
-  // print the sorted array
-  std::cout << std:: endl << "sorted:   ";
-  for (int i = 0; i < size; i++)
-    std::cout << numbers[i] << " ";
+  pthread_join(thread_left, NULL);
+  pthread_join(thread_right, NULL);
 
-  std::cout << std::endl;
-  float per_ms = (CLOCKS_PER_SEC/1000);
-  float run_time = ((float)end - (float)start) / per_ms;
-  std::cout << run_time << " ms" << std::endl;
+  merge(numbers, size, low, mid, high);
 }
+
