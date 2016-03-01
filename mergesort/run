@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# author: Zach Wilson
+# since: Feb 28, 2016
+
+clear
+
+# Remove previous *.out files
+if [ -e *.out ]; then
+  rm *.out
+fi
+
+# Run program
+g++ -lpthread main.cpp mergesort.cpp -o mergesort.out
+./mergesort.out
+
